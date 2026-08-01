@@ -14,7 +14,7 @@ COPY . .
 
 ENV FLASK_APP=crudapp.py
 
-RUN flask db init && flask db migrate -m "entries table" && flask db upgrade
+RUN flask db upgrade
 
 EXPOSE 5000
 
