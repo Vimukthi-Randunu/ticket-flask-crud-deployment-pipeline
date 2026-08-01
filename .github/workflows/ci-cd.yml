@@ -53,3 +53,20 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/ticket-flask-crud-deployment-pipeline:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/ticket-flask-crud-deployment-pipeline:${{ github.sha }}
+            docker stop ticket-crud-prod || true
+            docker rm ticket-crud-prod || true
+            docker run -d -p 80:5000 --name ticket-crud-prod ${{ secrets.DOCKER_USERNAME }}/ticket-flask-crud-deployment-pipeline:${{ github.sha }}
+            
