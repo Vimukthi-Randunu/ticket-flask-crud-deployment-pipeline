@@ -25,8 +25,10 @@ jobs:
         env:
           FLASK_APP: crudapp.py
         run: |
-          flask db init
-          flask db migrate -m "entries table"
+          # remove entirely. Only ever run once, by a human, when a project has no migration history yet. It's already done and committed.
+          # flask db init 
+          #remove too, for the same reason. This generates a new migration file by comparing models against current schema — we don't want a new one generated on every CI run; we already have the one migration file (73ffc2948065_entries_table.py) that fully describes the schema.
+          # flask db migrate -m "entries table"
           flask db upgrade
 
       - name: Run tests
