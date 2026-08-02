@@ -31,7 +31,7 @@ def add():
         title = form.get('title')
         description = form.get('description')
         if not title or description:
-            entry = Entry(title = title, description = description)
+            entry = Entry(titlee = title, description = description)
             db.session.add(entry)
             db.session.commit()
             return redirect('/')
